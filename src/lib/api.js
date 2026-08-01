@@ -1,6 +1,14 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
+function getCookie(name) {
+  if (typeof window === "undefined") return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+  return null;
+}
+
 // A client-side fetch helper that handles JSON, credentials, CSRF, and authorization tokens.
 export async function apiFetch(endpoint, options = {}) {
   const { redirectOn401 = false, ...fetchOptions } = options;
@@ -18,6 +26,11 @@ export async function apiFetch(endpoint, options = {}) {
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
+
+    const xsrfToken = getCookie("XSRF-TOKEN");
+    if (xsrfToken) {
+      headers["X-XSRF-TOKEN"] = xsrfToken;
+    }
   }
 
   const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
@@ -32,7 +45,17 @@ export async function apiFetch(endpoint, options = {}) {
     config.credentials = "include";
   }
 
-  const response = await fetch(url, config);
+  let response = await fetch(url, config);
+
+  // If 419 CSRF Token Mismatch occurs, fetch fresh CSRF cookie and retry once
+  if (response.status === 419 && typeof window !== "undefined") {
+    await getCsrfCookie();
+    const freshXsrfToken = getCookie("XSRF-TOKEN");
+    if (freshXsrfToken) {
+      config.headers["X-XSRF-TOKEN"] = freshXsrfToken;
+    }
+    response = await fetch(url, config);
+  }
 
   if (response.status === 401) {
     // If unauthorized, clear token if we are in client browser
