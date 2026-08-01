@@ -178,12 +178,12 @@ export default function MyDelsuOnboarding() {
   const courseList = courses;
 
   const done = {
-    email: !!user?.email_verified_at,
-    matric: savedMatric,
-    course: savedCourse,
-    wa: savedWa,
-    channel: joined,
-    bank: savedBank
+    email: true,
+    matric: savedMatric || !!user?.profile?.matric,
+    course: savedCourse || !!user?.profile?.academic_locked_at,
+    wa: savedWa || !!user?.profile?.whatsapp,
+    channel: joined || (typeof window !== "undefined" && !!localStorage.getItem("mydelsu_joined_channel")),
+    bank: savedBank || !!user?.bank_account
   };
   const total = 6;
   const doneCount = Object.values(done).filter(Boolean).length;
