@@ -325,13 +325,13 @@ const css = `
 .demo-hint{ font-size:12px; color:var(--muted); margin:10px 0 0; }
 .demo-link{ background:transparent; border:none; color:var(--blueDark); font-weight:700; text-decoration:underline; cursor:pointer; font-size:12px; padding:0; }
 .ferr{ background:#fdecec; border:1px solid #f5c6c6; color:var(--red); font-size:13px; font-weight:600; padding:10px 12px; border-radius:10px; margin:12px 0 0; line-height:1.45; }
-.save{ margin-top:16px; background:var(--blue); color:#fff; border:none; border-radius:11px; padding:11px 24px; font-size:14.5px; font-weight:700; cursor:pointer; transition:background .15s; }
+.save{ margin-top:16px; background:var(--blue); color:#fff; border:1px solid transparent; border-radius:11px; padding:0 24px; font-size:14.5px; font-weight:700; cursor:pointer; transition:background .15s; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; height:44px; vertical-align:middle; }
 .save:hover{ background:var(--blueDark); }
 .save:disabled{ background:#c3ccd6; cursor:default; }
 .channel{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
 .channel h2{ margin-bottom:4px; }
 .channel .card-sub{ margin:0; }
-.ghost{ background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:11px; padding:11px 20px; font-size:14.5px; font-weight:700; text-decoration:none; white-space:nowrap; cursor:pointer; }
+.ghost{ background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:11px; padding:0 20px; font-size:14.5px; font-weight:700; text-decoration:none; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; height:44px; vertical-align:middle; transition:all .15s; }
 .ghost:hover{ border-color:var(--blue); color:var(--blue); }
 
 @media (max-width:520px){ .head h1{ font-size:24px; } .channel{ flex-direction:column; align-items:flex-start; } .grid2{ grid-template-columns:1fr; } }
