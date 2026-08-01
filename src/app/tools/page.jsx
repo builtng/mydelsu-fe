@@ -215,7 +215,13 @@ export default function MannaTools() {
   const xHref = "https://twitter.com/intent/tweet?text=" + enc(SHARE_TEXT) + "&url=" + enc(SHARE_URL);
   const tgHref = "https://t.me/share/url?url=" + enc(SHARE_URL) + "&text=" + enc(SHARE_TEXT);
 
-  const links = ["Home", "Our Wall of Thanks", "Past winners", "Student tools", "How it works", "Become a sponsor", "About Manna", "Sign in"];
+  const links = [
+    ["Manna", "/"],
+    ["Wall of Thanks", "/wall-of-thanks"],
+    ["Student tools", "/tools"],
+    ["Become a sponsor", "/sponsor"],
+    ["About us", "/about"]
+  ];
   const perPage = 4;
   const pageCount = Math.ceil(PAST_WINNERS.length / perPage);
   const shownWinners = PAST_WINNERS.slice(page * perPage, page * perPage + perPage);
@@ -298,7 +304,7 @@ export default function MannaTools() {
       <div className={"drawer-overlay" + (menuOpen ? " open" : "")} onClick={() => setMenuOpen(false)} />
       <aside className={"drawer" + (menuOpen ? " open" : "")} aria-hidden={!menuOpen}>
         <div className="drawer-head"><span className="drawer-title">Menu</span><button className="close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><svg viewBox="0 0 24 24" width="22" height="22" stroke="#0f172a" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
-        <ul className="drawer-links">{links.map((l) => (<li key={l}><a href="#" onClick={() => setMenuOpen(false)}>{l}</a></li>))}</ul>
+        <ul className="drawer-links">{links.map(([l, h]) => (<li key={l}><a href={h} onClick={() => setMenuOpen(false)}>{l}</a></li>))}</ul>
         <button className="drawer-cta" onClick={() => { setMenuOpen(false); entry(); }}>{cLabel}</button>
       </aside>
 
@@ -378,7 +384,7 @@ export default function MannaTools() {
               </div>
             ))}
           </div>
-          <div className="thanks-more"><a className="see-all" href="#">See all gratitudes</a></div>
+          <div className="thanks-more"><a className="see-all" href="/wall-of-thanks">See all gratitudes</a></div>
         </section>
 
         {/* Past winners */}
