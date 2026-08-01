@@ -40,6 +40,7 @@ export default function MyDelsuSettings() {
   const [acctNo, setAcctNo] = useState("");
   const [resolved, setResolved] = useState(null);
   const [bankErr, setBankErr] = useState("");
+  const [verifyingBank, setVerifyingBank] = useState(false);
 
   const [currentPw, setCurrentPw] = useState("");
   const [pw, setPw] = useState("");
@@ -106,6 +107,7 @@ export default function MyDelsuSettings() {
     if (acctNo.replace(/\D/g, "").length !== 10) return setBankErr("Enter your 10 digit account number.");
     setBankErr("");
     setResolved(null);
+    setVerifyingBank(true);
 
     const selectedBank = BANKS.find(b => b.name === bank);
     try {
@@ -130,6 +132,8 @@ export default function MyDelsuSettings() {
       }
     } catch (e) {
       setBankErr("Network or Paystack verification error. Try again.");
+    } finally {
+      setVerifyingBank(false);
     }
   }
 
@@ -238,7 +242,20 @@ export default function MyDelsuSettings() {
           />
           <label>Account number</label>
           <input value={acctNo} onChange={(e) => { setAcctNo(e.target.value); setResolved(null); }} inputMode="numeric" maxLength={10} placeholder="10 digit account number" />
-          <button className="ghost verify" onClick={verifyAccount}>Verify account</button>
+          <button className="ghost verify" onClick={verifyAccount} disabled={verifyingBank}>
+            {verifyingBank ? (
+              <>
+                <span className="spinner-sm" aria-hidden="true" />
+                Verifying account...
+              </>
+            ) : "Verify account"}
+          </button>
+          {verifyingBank && (
+            <div className="verifying-box">
+              <span className="spinner-blue" />
+              <span>Fetching official account holder name from Paystack...</span>
+            </div>
+          )}
           {resolved && (<div className={"resolved" + (resolved.match ? " ok" : " bad")}>{resolved.match ? <Tick /> : <Ex />}<span>{resolved.name}</span></div>)}
           {bankErr && <p className="ferr">{bankErr}</p>}
           <button className="save" onClick={saveBank} disabled={!resolved || !resolved.match}>Save bank details</button>
@@ -333,6 +350,10 @@ const css = `
 .channel .card-sub{ margin:0; }
 .ghost{ background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:11px; padding:0 20px; font-size:14.5px; font-weight:700; text-decoration:none; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; height:44px; vertical-align:middle; transition:all .15s; }
 .ghost:hover{ border-color:var(--blue); color:var(--blue); }
+.spinner-sm{ width:14px; height:14px; border:2px solid #cbd5e1; border-top-color:var(--blue); border-radius:50%; animation:spin 0.6s linear infinite; display:inline-block; margin-right:8px; }
+.spinner-blue{ width:16px; height:16px; border:2px solid #93c5fd; border-top-color:#1d4ed8; border-radius:50%; animation:spin 0.6s linear infinite; display:inline-block; flex-shrink:0; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.verifying-box{ display:flex; align-items:center; gap:10px; margin-top:12px; padding:12px 14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:11px; font-size:13.5px; font-weight:600; color:#1e40af; }
 
 @media (max-width:520px){ .head h1{ font-size:24px; } .channel{ flex-direction:column; align-items:flex-start; } .grid2{ grid-template-columns:1fr; } }
 `;
