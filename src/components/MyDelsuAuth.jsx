@@ -71,8 +71,10 @@ export default function MyDelsuAuth({ initialView = "login" }) {
 
     try {
       await register(name.trim(), email.trim(), password, confirm);
-      setSentMode("register");
-      setView("sent");
+      flash("Account created! A welcome email has been sent to your inbox. Taking you to your dashboard.");
+      setTimeout(() => {
+        window.location.href = "/onboarding";
+      }, 1200);
     } catch (err) {
       setError(err.message || "Registration failed. Try a different email.");
     } finally {
