@@ -131,13 +131,15 @@ export default function MyDelsuHome() {
   useEffect(() => {
     async function loadData() {
       try {
-        // 1. Get status
-        const statusRes = await apiFetch("/entries/status");
-        if (statusRes.ok) {
-          const status = await statusRes.json();
-          setEntered(status.entered);
-          setActiveCohort(status.active_cohort);
-          setEntrantsCount(status.entrants_count);
+        // 1. Get status for authenticated user
+        if (user) {
+          const statusRes = await apiFetch("/entries/status");
+          if (statusRes.ok) {
+            const status = await statusRes.json();
+            setEntered(status.entered);
+            setActiveCohort(status.active_cohort);
+            setEntrantsCount(status.entrants_count);
+          }
         }
         
         // 2. Load approved gratitudes
