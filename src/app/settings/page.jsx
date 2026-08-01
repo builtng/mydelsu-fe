@@ -191,8 +191,13 @@ export default function MyDelsuSettings() {
       <div className={"drawer-overlay" + (menuOpen ? " open" : "")} onClick={() => setMenuOpen(false)} />
       <aside className={"drawer" + (menuOpen ? " open" : "")} aria-hidden={!menuOpen}>
         <div className="drawer-head"><span className="drawer-user"><span className="ava small">{initials}</span>{REG_NAME}</span><button className="close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><svg viewBox="0 0 24 24" width="22" height="22" stroke="#0f172a" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
-        <ul className="drawer-links">{["Dashboard", "Manna", "Tools", "Account settings"].map((l) => (<li key={l}><a href="#" onClick={() => setMenuOpen(false)}>{l}</a></li>))}</ul>
-        <button className="drawer-out" onClick={() => setMenuOpen(false)}>Log out</button>
+        <ul className="drawer-links">
+          <li><a href="/" onClick={() => setMenuOpen(false)}>Dashboard</a></li>
+          <li><a href="/#manna" onClick={() => setMenuOpen(false)}>Manna</a></li>
+          <li><a href="/tools" onClick={() => setMenuOpen(false)}>Tools</a></li>
+          <li><a href="/settings" onClick={() => setMenuOpen(false)}>Account settings</a></li>
+        </ul>
+        <button className="drawer-out" onClick={logout}>Log out</button>
       </aside>
 
       <main className="page">
